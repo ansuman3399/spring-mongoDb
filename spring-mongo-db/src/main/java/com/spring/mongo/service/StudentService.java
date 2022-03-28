@@ -1,7 +1,9 @@
 package com.spring.mongo.service;
 
 import com.spring.mongo.entity.Student;
+import com.spring.mongo.repository.DepartmentRepository;
 import com.spring.mongo.repository.StudentRepository;
+import com.spring.mongo.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +18,17 @@ public class StudentService {
     @Autowired
     StudentRepository studentRepository;
 
+    @Autowired
+    DepartmentRepository departmentRepository;
+
+    @Autowired
+    SubjectRepository subjectRepository;
+
     public Student createStudent(Student student) {
+        if(student.getDepartment()!=null)
+            departmentRepository.save(student.getDepartment());
+        if(student.getSubjects()!=null && student.getSubjects().size()>0 )
+            subjectRepository.saveAll(student.getSubjects());
         return studentRepository.save(student);
     }
 
